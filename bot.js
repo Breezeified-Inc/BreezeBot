@@ -1,12 +1,14 @@
 //Import Required Modules!
 const Discord = require('discord.js');
-const fs = require('fs');
+const fs = require('node:fs');
+const path = require('node:path');
+const { Client, Collection, Intents } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 require('dotenv').config();
 const prefix = "!";
 const fetch = require('node-fetch');
-const {Client, Intents, Messages, Guild} = require('discord.js');
+const { Messages, Guild } = require('discord.js');
 const keepAlive = require("./server")
 
 const client = new Client({
@@ -84,10 +86,7 @@ client.on("message", msg => {
 })
 
 
-
-
-
-// Test
+/*
 client.on('interactionCreate', async interaction => {
 	// ...
 	if (commandName === 'cat') {
@@ -96,6 +95,9 @@ client.on('interactionCreate', async interaction => {
 		interaction.editReply({ files: [file] });
 	}
 });
+*/ 
+
+client.commands = new Collection(); 
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
