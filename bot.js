@@ -26,11 +26,7 @@ client.on('ready', () => {
 
 client.login(process.env.token)
 
-client.on('ready', () => console.log('The Bot is ready!'));
-// Adding jokes function
 
-// Jokes from dcslsoftware.com/20-one-liners-only-software-developers-understand/
-// www.journaldev.com/240/my-25-favorite-programming-quotes-that-are-funny-too
 const jokes = [
   'I went to a street where the houses were numbered 8k, 16k, 32k, 64k, 128k, 256k and 512k. It was a trip down Memory Lane.',
   '“Debugging” is like being the detective in a crime drama where you are also the murderer.',
@@ -90,28 +86,7 @@ client.on("message", msg => {
 
 
 
-// Roblox Api Call Test
-function getJell() {
-  return fetch("https://api.roblox.com/users/2956924165")
-    .then(res => {
-      return res.json()
-      })
-    .then(data => {
-      return data("IsOnline")  
-    })
-}
 
-client.on("ready", () => {
-  console.log(`Roblox API Test as ${client.user.tag}!`)
-})
-
-client.on("message", msg => {
-  if (msg.author.bot) return
-    
-  if (msg.content === "%Jellus") {
-    getJell().then(quote => msg.channel.send(quote))
-  }
-})
 // Test
 client.on('interactionCreate', async interaction => {
 	// ...
