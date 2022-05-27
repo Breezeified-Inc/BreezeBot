@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "node bot.js",
-    "test": "penis"
+    "test": "y!help"
   },
   "devDependencies": {
     "@types/node": "^17.0.21"
