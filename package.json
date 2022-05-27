@@ -9,7 +9,7 @@
     "fs": "0.0.1-security"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node bot.js",
     "test": "penis"
   },
   "devDependencies": {
