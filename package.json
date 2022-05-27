@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "node index.js"
+    "test": "penis"
   },
   "devDependencies": {
     "@types/node": "^17.0.21"
