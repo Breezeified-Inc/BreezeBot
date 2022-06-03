@@ -9,7 +9,9 @@ require('dotenv').config();
 const prefix = "!";
 const fetch = require('node-fetch');
 const { Messages, Guild } = require('discord.js');
-const keepAlive = require("./server")
+const deploy = require('./deploy-commands.js');
+const { clientId, guildId } = require('./config.json');
+
 
 const client = new Client({
   // Get Intents
@@ -26,7 +28,7 @@ client.on('ready', () => {
 });
 
 
-client.login(process.env.token)
+client.login(process.env.TOKEN)
 
 
 const jokes = [
@@ -52,14 +54,7 @@ client.on('message', (msg) => {
 });
 
 
-// Stufff 
-client.on('interactionCreate', async interaction => {
-	if (!interaction.isCommand()) return;
 
-	const { commandName } = interaction;
-
-	// ...
-});
 
 
 
@@ -96,8 +91,54 @@ client.on('interactionCreate', async interaction => {
 	}
 });
 */ 
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return;
 
-client.commands = new Collection(); 
+	const { commandName } = interaction;
+
+	if (commandName === 'ping') {
+		await interaction.reply('Pong!');
+	} else if (commandName === 'beep') {
+		await interaction.reply('Boop!');
+	}
+});
+
+
+client.on('interactionCreate', interaction => {
+	console.log(`${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`);
+});
+
+//event importer + collection adder
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+
+for (const file of eventFiles) {
+	const filePath = path.join(eventsPath, file);
+	const event = require(filePath);
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args));
+	} else {
+		client.on(event.name, (...args) => event.execute(...args));
+	}
+};
+/////////////////////////////////
+
+
+
+
+/////////////////////////////////
+client.commands = new Collection();
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const filePath = path.join(commandsPath, file);
+	const command = require(filePath);
+	client.commands.set(command.data.name, command);
+}
+
+
+
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
@@ -112,21 +153,3 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
-
-client.on('interactionCreate', interaction => {
-	console.log(`${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`);
-});
-const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
-
-for (const file of eventFiles) {
-	const filePath = path.join(eventsPath, file);
-	const event = require(filePath);
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args));
-	}
-}
-
-keepAlive()
